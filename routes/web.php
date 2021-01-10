@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Admin\BoxController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use App\Http\Controllers\Admin\BoxController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::any('/webhook', [WebhookController::class, 'index'])->name('webhook');
 Route::any('/login', [LoginController::class, 'login'])->name('login');
 Route::any('/password', [LoginController::class, 'password'])->name('password');
 Route::any('/password_ok', [LoginController::class, 'passwordOk'])->name('password_ok');
