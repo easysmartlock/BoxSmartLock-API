@@ -1,1 +1,1 @@
-Nouveau SMS
+Nouveau SMS {{ $body }}

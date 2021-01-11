@@ -30,7 +30,8 @@ class WebhookController extends Controller {
             $msg = "NOT VALID. It might have been spoofed!";
         }
 
-        Mail::to('lala.misa.09@googlemail.com')->send(new Receipt());
+        $body = $request->input('body');
+        Mail::to('lala.misa.09@googlemail.com')->send(new Receipt($body));
 
         $response = new MessagingResponse();
         $response->message($msg);
