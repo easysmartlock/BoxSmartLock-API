@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Twilio\TwiML\MessagingResponse;
 use Twilio\Security\RequestValidator;
+use Mail;
+use App\Mail\Receipt;
 
 /**
  * Webhook controller for twilio
@@ -27,6 +29,8 @@ class WebhookController extends Controller {
         } else {
             $msg = "NOT VALID. It might have been spoofed!";
         }
+
+        Mail::to('lala.misa.09@googlemail.com')->send(new Receipt());
 
         $response = new MessagingResponse();
         $response->message($msg);
