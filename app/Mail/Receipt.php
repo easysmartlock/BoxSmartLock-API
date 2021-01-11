@@ -18,7 +18,7 @@ class Receipt extends Mailable
      *
      * @return void
      */
-    public function __construct(string $body)
+    public function __construct($body)
     {
         //
         $this->body = $body;
