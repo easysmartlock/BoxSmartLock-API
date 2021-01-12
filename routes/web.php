@@ -82,5 +82,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [BoxController::class, 'delete']
     )->name('box_delete');
 
+    Route::post(
+        '/boxes/pass',
+        [BoxController::class, 'pass']
+    )->name('box_pass');
+
 
 });

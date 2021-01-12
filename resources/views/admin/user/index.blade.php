@@ -46,7 +46,9 @@
                             {{ $user->nom }}
                         </td>
                         <td>
-                            {{ $user->email }}
+                            <a href="{{ route('user_view', ['id' => $user->id]) }}">
+                                {{ $user->email }}
+                            </a>
                         </td>
                         <td>
                             {{ $user->telephone }}

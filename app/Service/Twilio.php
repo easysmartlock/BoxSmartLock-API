@@ -119,4 +119,42 @@ class Twilio {
         }
     }
 
+    /**
+     * modifie durée ouverture porte
+     * 
+     * @param Box $box
+     * @param string $duration
+     * @return bool
+     */
+    public function editDuration(Box $box, string $duration)
+    {
+        $message = $box->pass .'GOT' . $duration .'#' ;
+        try {
+            $this->send($box->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Modification mot de passe Box
+     * 
+     * @param Box $box
+     * @param string $pass
+     * @return bool
+     */
+    public function setBoxPassword(Box $box, string $pass)
+    {
+        $message = $pass .'P' . $box->pass ;
+        try {
+            $this->send($box->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
 }

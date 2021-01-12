@@ -111,4 +111,25 @@ class BoxController extends Controller
         return response()->json($reponse);
     }
 
+    /**
+     * Modification durée ouverture
+     * 
+     * @param Request $request
+     * @param Twilio $twilio
+     * @return json
+     */
+    public function editDuration(Request $request, Twilio $twilio)
+    {
+        $id = $request->input('id');
+        $duration = $request->input('duration');
+        $box = Box::find($id);
+        $result = $twilio->editDuration($box,$duration);
+
+        $reponse = Constante::getReponse();
+        $reponse[Constante::PROP_DATA] = $result;
+        $reponse[Constante::PROP_ETAT] = Constante::API_OK;
+
+        return response()->json($reponse);
+    }
+
 }

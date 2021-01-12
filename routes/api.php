@@ -42,5 +42,6 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('/boxes/{id}','BoxController@find');
     Route::post('/boxes/add-phone','BoxController@addPhone');
     Route::post('/boxes/edit-access','BoxController@editAccess');
+    Route::post('/boxes/edit-duration','BoxController@editDuration');
 });
 

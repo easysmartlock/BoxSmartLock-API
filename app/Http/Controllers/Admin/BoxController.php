@@ -8,6 +8,7 @@ use App\Models\Box;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Service\Twilio;
 
 class BoxController extends Controller {
 
@@ -74,4 +75,31 @@ class BoxController extends Controller {
         }
     }
 
+
+    /**
+     * Mot de passe box 
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param Twilio $twilio
+     * @return \Illuminate\Http\Response
+     */
+    public function pass(Request $request, Twilio $twilio)
+    {
+        $id = $request->input('id');
+        $pass = $request->input('pass');
+
+        $box = Box::find($id);
+
+        if(!$box) {
+            return redirect()->route('box_index')->with('message','Box introuvable');
+        }
+
+        $previous = $box->pass;
+        $box->pass = $pass;
+        $box->save();
+
+        $twilio->setBoxPassword($box,$previous);
+
+        return redirect()->route('box_index')->with('message','Mot de passe de la box modifié !');
+    }
 }

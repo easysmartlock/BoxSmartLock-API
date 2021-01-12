@@ -74,6 +74,9 @@
                                     <i class="lni lni-user"></i>
                                 </a>
                            @endif
+                           <a data-id="{{ $box->id }}" title="Modifier mot de passe" class="btn-pass-box-edit btn btn-primary" href="">
+                                <i class="lni lni-money-protection"></i>
+                           </a>
                         </td>
                     </tr>
                 @endforeach
@@ -150,6 +153,38 @@
     </div>
 </div>
 
+<!-- password modal -->
+<div id="pass-box-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier mot de passe de la box</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <form id="form-pass-box" action="{{ route('box_pass') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" id="passid" />
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="pass" required>
+                    <label>Mot de passe</label>
+                </div>
+                <div style="display: none">
+                    <button id="btn-box-pass"></button>
+                </div>
+            </form>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button id="btn-box-pass-save" type="button" class="btn btn-primary">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
 @endsection
 
 
@@ -176,12 +211,24 @@
                 $('#btn-box-ok').click();
             });
 
+            $('#btn-box-pass-save').click(function(e) {
+                $('#btn-box-pass').click();
+            });
+
             $('.btn-attach-client').click(function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
                 $('#attach-modal').modal("show");
                 $("#id").val(id);
 
+            });
+
+
+            $('.btn-pass-box-edit').click(function(e) {
+                e.preventDefault();
+                let id = $(this).data('id');
+                $('#pass-box-modal').modal("show");
+                $("#passid").val(id);
             });
         });
     </script>
