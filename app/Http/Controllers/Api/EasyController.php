@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Service\Constante;
-use App\Models\Box;
-use App\Models\Telephone;
+use App\Models\Easy;
+use App\Models\EasyTelephone;
 use Carbon\Carbon;
 use App\Service\Twilio;
 
-class BoxController extends Controller
+class EasyController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('box',[
+        $this->middleware('easy',[
             'except' => [
                 'get',
                 'find'
@@ -24,9 +24,8 @@ class BoxController extends Controller
         ]);
     }
 
-
     /**
-     * Recuperation des boxes du profil
+     * Recuperation des serrures du profil
      * 
      * @param Request $request
      * @return json
@@ -35,14 +34,14 @@ class BoxController extends Controller
     {
         $user = $request->user();
         $reponse = Constante::getReponse();
-        $reponse[Constante::PROP_DATA] = $user->boxes->toArray();
+        $reponse[Constante::PROP_DATA] = $user->easies->toArray();
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);
     }
 
     /**
-     * Recuperation detail d'un box
+     * Recuperation detail d'une serrure
      * 
      * @param Request $request
      * @param String $id
@@ -52,7 +51,7 @@ class BoxController extends Controller
     {
         $user = $request->user();
         $reponse = Constante::getReponse();
-        $reponse[Constante::PROP_DATA] = $user->boxes()->where('id', $id)->first()->toArray();
+        $reponse[Constante::PROP_DATA] = $user->easies()->where('id', $id)->first()->toArray();
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);
@@ -68,7 +67,7 @@ class BoxController extends Controller
     public function addPhone(Request $request,Twilio $twilio)
     {
         $id = $request->input('id');
-        $box = Box::find($id);
+        $e = Easy::find($id);
         $user = $request->user();
         $debut = $request->input('debut');
         $fin = $request->input('fin');
@@ -76,8 +75,8 @@ class BoxController extends Controller
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
 
-        $result = $twilio->addTelBox(
-            $box,
+        $result = $twilio->addTelEasy(
+            $e,
             $prefix.$telephone,
             $debut,
             $fin,
@@ -91,7 +90,6 @@ class BoxController extends Controller
         return response()->json($reponse);
     }
 
-
     /**
      * Modifier les access
      * @param Request $request 
@@ -102,8 +100,8 @@ class BoxController extends Controller
     {
         $id = $request->input('id');
         $action = $request->input('action');
-        $box = Box::find($id);
-        $result = $twilio->editAccess($box,$action);
+        $e = Easy::find($id);
+        $result = $twilio->editEasyAccess($e,$action);
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -123,8 +121,8 @@ class BoxController extends Controller
     {
         $id = $request->input('id');
         $duration = $request->input('duration');
-        $box = Box::find($id);
-        $result = $twilio->editDuration($box,$duration);
+        $e = Easy::find($id);
+        $result = $twilio->editEasyDuration($e,$duration);
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -132,7 +130,6 @@ class BoxController extends Controller
 
         return response()->json($reponse);
     }
-
 
     /**
      * Récupération des téléphones
@@ -143,10 +140,10 @@ class BoxController extends Controller
     public function getPhones(Request $request)
     {
         $id = $request->input('id');
-        $box = Box::find($id);
+        $e = Easy::find($id);
         
         $reponse = Constante::getReponse();
-        $reponse[Constante::PROP_DATA] = (count($box->telephones) > 0) ? $box->telephones : [];
+        $reponse[Constante::PROP_DATA] = (count($e->telephones) > 0) ? $e->telephones : [];
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);
@@ -163,8 +160,8 @@ class BoxController extends Controller
     public function requestPhone(Request $request, Twilio $twilio)
     {
         $id = $request->input('id');
-        $box = Box::find($id);
-        $result = $twilio->requestPhone($box);
+        $e = Easy::find($id);
+        $result = $twilio->requestEasyPhone($e);
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -187,17 +184,17 @@ class BoxController extends Controller
         $id = $request->input('id');
         $phoneId = $request->input('phoneId');
 
-        $box = Box::find($id);
-        $phone = Telephone::find($phoneId);
+        $e = Easy::find($id);
+        $phone = EasyTelephone::find($phoneId);
         $result = false;
 
-        if($phone && $phone->box->id == $box->id) {
-            $result  = $twilio->delPhone($box,$phone);
+        if($phone && $phone->easy->id == $e->id) {
+            $result  = $twilio->delEasyPhone($e,$phone);
             if($result) {
                 $phone->telephone = NULL;
                 $phone->save();
-                $box->refresh();
-                $reponse[Constante::PROP_DATA] = $box->telephones;
+                $e->refresh();
+                $reponse[Constante::PROP_DATA] = $e->telephones;
             }
         } else {
             $reponse[Constante::PROP_MESSAGE] = 'Numéro introuvable' ;
@@ -207,5 +204,4 @@ class BoxController extends Controller
 
         return response()->json($reponse);
     }
-
 }

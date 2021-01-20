@@ -58,4 +58,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Box','user_id');
     }
+
+    /**
+     * Recupère des serrures
+     */
+    public function easies()
+    {
+        return $this->hasMany('App\Models\Easy','user_id');
+    }
 }

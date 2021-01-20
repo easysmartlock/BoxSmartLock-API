@@ -6,6 +6,8 @@ use Twilio\TwiML\MessagingResponse;
 use Twilio\Security\RequestValidator;
 use Mail;
 use App\Mail\Receipt;
+use App\Models\Box;
+use App\Models\Telephone;
 
 /**
  * Webhook controller for twilio
@@ -31,11 +33,41 @@ class WebhookController extends Controller {
         }
 
         $body = $request->input('Body');
+        $from = $request->input('From');
+
+        $box = Box::where('telephone', $from)->first();
+        if(!empty($box)) {
+            foreach($box->telephones as $telephone) {
+                $telephone->delete();
+            }
+            $tabs = $this->parseInput($body);
+            if(count($tabs) > 0) {
+                foreach($tabs as $tab) {
+                    if(!empty($tab)) {
+                        $data = explode(':', $tab);
+                        $telephone = new Telephone();
+                        $telephone->box()->associate($box);
+                        $telephone->ordre = $data[0];
+                        if(stripos($data[1], 'empty') === false) {
+                            $telephone->telephone = $data[1];
+                        } 
+                        $telephone->save();
+                    }
+                }
+            }          
+        }
+
         Mail::to('lala.misa.09@googlemail.com')->send(new Receipt($body));
 
         $response = new MessagingResponse();
         $response->message($msg);
         return response($msg, 200);
+    }
+
+    private function parseInput(string $str)
+    {
+        $tab = explode("\n", $str);
+        return $tab;
     }
 
 }

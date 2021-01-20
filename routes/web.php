@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Admin\BoxController;
+use App\Http\Controllers\Admin\EasyController;
 use App\Http\Controllers\WebhookController;
 
 /*
@@ -87,5 +88,33 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [BoxController::class, 'pass']
     )->name('box_pass');
 
+    /**
+     * Gestion Easy
+     */
+
+    Route::get(
+        '/easies',
+        [EasyController::class, 'index']
+    )->name('easy_index');
+    
+    Route::post(
+        '/easies',
+        [EasyController::class, 'add']
+    );
+
+    Route::post(
+        '/easies/attach',
+        [EasyController::class, 'attach']
+    )->name('easy_attach');
+
+    Route::get(
+        '/easies/{id}/delete',
+        [EasyController::class, 'delete']
+    )->name('easy_delete');
+
+    Route::post(
+        '/easies/pass',
+        [EasyController::class, 'pass']
+    )->name('easy_pass');
 
 });

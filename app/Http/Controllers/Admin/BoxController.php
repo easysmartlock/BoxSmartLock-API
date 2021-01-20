@@ -64,7 +64,7 @@ class BoxController extends Controller {
         ]);
 
         if($validator->fails()) {
-            return redirect()->route('user_index')->withErrors($validator)->withInput();
+            return redirect()->route('box_index')->withErrors($validator)->withInput();
         } else {
             $box = new Box();
             $box->pass = $request->input('pass');

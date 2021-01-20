@@ -3,6 +3,9 @@ namespace App\Service;
 
 use Twilio\Rest\Client;
 use App\Models\Box;
+use App\Models\Easy;
+use App\Models\Telephone;
+use App\Models\EasyTelephone;
 use Carbon\Carbon;
 
 class Twilio {
@@ -150,6 +153,168 @@ class Twilio {
         $message = $pass .'P' . $box->pass ;
         try {
             $this->send($box->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+
+    /**
+     * Demande la liste des telephones
+     * 
+     * @param Box $box
+     * @return bool
+     */
+    public function requestPhone(Box $box)
+    {
+        $message = $box->pass. 'AL001#020#';
+        try {
+            $this->send($box->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }       
+    }
+
+    /**
+     * Suppresion telephone
+     * @param Box $box
+     * @param Telephone $telephone
+     * @return bool
+     */
+    public function delPhone(Box $box, Telephone $telephone)
+    {
+        $message = $box->pass. 'A'.$telephone->ordre.'##';
+        try {
+            $this->send($box->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Modifier mot de passe serrure
+     * @param Easy $easy
+     * @param string $pass
+     * @return bool
+     */
+    public function setEasyPassword(Easy $easy, string $pass)
+    {
+        $message = $pass .'P' . $easy->pass ;
+        try {
+            $this->send($easy->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Ajout un telephone serrure
+     * 
+     * @param App\Models\Easy
+     * @param string $tel
+     * @param string $debut
+     * @param string $fin
+     * @param bool $unlimited
+     * @return bool
+     */
+    public function addTelEasy(Easy $e,string $telephone,string $debut,string $fin,bool $unlimited = true)
+    {
+        $msg = "" ;
+        if($unlimited == true) {
+            $msg = $e->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#";
+        } else {
+            $msg = $e->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
+        }
+
+        try {
+            $this->send($e->telephone,$msg);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * ouvre ou restreint access
+     * 
+     * @param Easy $e
+     * @param string $action
+     * @return bool
+     */
+    public function editEasyAccess(Easy $e, string $action)
+    {
+        $todo = 'AUT' ;
+        if($action == self::ACTION_OPEN) {
+            $todo = 'ALL' ;
+        }
+        
+        $message = $e->pass . $todo .'#' ;
+        try {
+            $this->send($e->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * modifie durée ouverture porte
+     * 
+     * @param Easy $e
+     * @param string $duration
+     * @return bool
+     */
+    public function editEasyDuration(Easy $e, string $duration)
+    {
+        $message = $e->pass .'GOT' . $duration .'#' ;
+        try {
+            $this->send($e->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Demande la liste des telephones de la serrure
+     * 
+     * @param Easy $e
+     * @return bool
+     */
+    public function requestEasyPhone(Easy $e)
+    {
+        $message = $e->pass. 'AL001#020#';
+        try {
+            $this->send($e->telephone,$message);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }       
+    }
+
+    /**
+     * Suppresion telephone serrure
+     * @param Easy $e
+     * @param EasyTelephone $telephone
+     * @return bool
+     */
+    public function delEasyPhone(Easy $e, EasyTelephone $telephone)
+    {
+        $message = $e->pass. 'A'.$telephone->ordre.'##';
+        try {
+            $this->send($e->telephone,$message);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());

@@ -19,6 +19,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('box_index') }}">Boitiers</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('easy_index') }}">Serrures</a>
+                </li>
             </ul>
         </div>
     </div>

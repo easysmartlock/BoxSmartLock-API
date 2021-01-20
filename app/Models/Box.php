@@ -16,4 +16,12 @@ class Box extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+     /**
+     * Recupération des téléphones
+     */
+    public function Telephones()
+    {
+        return $this->hasMany('App\Models\Telephone','box_id');
+    }
 }
