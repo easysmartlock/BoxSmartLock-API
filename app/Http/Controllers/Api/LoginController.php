@@ -39,7 +39,7 @@ class LoginController extends Controller
          * validation champs
          */
         if($validator->fails()) {
-            $reponse[Constante::PROP_MESSAGE] = $validator->errors();
+            $reponse[Constante::PROP_MESSAGE] = $validator->errors()->all();
             return response()->json($reponse);
         }
 
