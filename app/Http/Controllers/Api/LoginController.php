@@ -39,7 +39,7 @@ class LoginController extends Controller
          * validation champs
          */
         if($validator->fails()) {
-            $reponse[Constante::PROP_MESSAGE] = 'Les champs sont requis' ;
+            $reponse[Constante::PROP_MESSAGE] = $validator->errors();
             return response()->json($reponse);
         }
 
