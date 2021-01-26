@@ -80,7 +80,8 @@ class EasyController extends Controller
             $prefix.$telephone,
             $debut,
             $fin,
-            $unlimited
+            $unlimited,
+            $request->user()
         );
 
         $reponse = Constante::getReponse();
@@ -101,7 +102,7 @@ class EasyController extends Controller
         $id = $request->input('id');
         $action = $request->input('action');
         $e = Easy::find($id);
-        $result = $twilio->editEasyAccess($e,$action);
+        $result = $twilio->editEasyAccess($e,$action,$request->user());
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -122,7 +123,7 @@ class EasyController extends Controller
         $id = $request->input('id');
         $duration = $request->input('duration');
         $e = Easy::find($id);
-        $result = $twilio->editEasyDuration($e,$duration);
+        $result = $twilio->editEasyDuration($e,$duration,$request->user());
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -161,7 +162,7 @@ class EasyController extends Controller
     {
         $id = $request->input('id');
         $e = Easy::find($id);
-        $result = $twilio->requestEasyPhone($e);
+        $result = $twilio->requestEasyPhone($e,$request->user());
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -189,7 +190,7 @@ class EasyController extends Controller
         $result = false;
 
         if($phone && $phone->easy->id == $e->id) {
-            $result  = $twilio->delEasyPhone($e,$phone);
+            $result  = $twilio->delEasyPhone($e,$phone,$request->user());
             if($result) {
                 $phone->telephone = NULL;
                 $phone->save();

@@ -4,8 +4,10 @@ namespace App\Service;
 use Twilio\Rest\Client;
 use App\Models\Box;
 use App\Models\Easy;
+use App\Models\User;
 use App\Models\Telephone;
 use App\Models\EasyTelephone;
+use App\Models\Historique as HModel;
 use Carbon\Carbon;
 
 class Twilio {
@@ -78,9 +80,10 @@ class Twilio {
      * 
      * @param App\Models\Box
      * @param string $tel
+     * @param User $user
      * @return bool
      */
-    public function addTelBox(Box $box,string $telephone,string $debut,string $fin,bool $unlimited = true)
+    public function addTelBox(Box $box,string $telephone,string $debut,string $fin,bool $unlimited = true,User $user)
     {
         $msg = "" ;
         if($unlimited == true) {
@@ -91,6 +94,7 @@ class Twilio {
 
         try {
             $this->send($box->telephone,$msg);
+            Historique::save($box->id,HModel::modelBox,HModel::ajoutTel,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -103,9 +107,10 @@ class Twilio {
      * 
      * @param Box $box
      * @param string $action
+     * @param User $user
      * @return bool
      */
-    public function editAccess(Box $box, string $action)
+    public function editAccess(Box $box, string $action, User $user)
     {
         $todo = 'AUT' ;
         if($action == self::ACTION_OPEN) {
@@ -115,6 +120,7 @@ class Twilio {
         $message = $box->pass . $todo .'#' ;
         try {
             $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::access,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -127,13 +133,15 @@ class Twilio {
      * 
      * @param Box $box
      * @param string $duration
+     * @param User $user
      * @return bool
      */
-    public function editDuration(Box $box, string $duration)
+    public function editDuration(Box $box, string $duration, User $user)
     {
         $message = $box->pass .'GOT' . $duration .'#' ;
         try {
             $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::duration,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -146,13 +154,15 @@ class Twilio {
      * 
      * @param Box $box
      * @param string $pass
+     * @param User $user
      * @return bool
      */
-    public function setBoxPassword(Box $box, string $pass)
+    public function setBoxPassword(Box $box, string $pass, User $user)
     {
         $message = $pass .'P' . $box->pass ;
         try {
             $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::modifPass,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -165,13 +175,15 @@ class Twilio {
      * Demande la liste des telephones
      * 
      * @param Box $box
+     * @param User $user
      * @return bool
      */
-    public function requestPhone(Box $box)
+    public function requestPhone(Box $box, User $user)
     {
         $message = $box->pass. 'AL001#020#';
         try {
             $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::listeTel,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -183,13 +195,16 @@ class Twilio {
      * Suppresion telephone
      * @param Box $box
      * @param Telephone $telephone
+     * @param User $user
      * @return bool
      */
-    public function delPhone(Box $box, Telephone $telephone)
+    public function delPhone(Box $box, Telephone $telephone, User $user)
     {
         $message = $box->pass. 'A'.$telephone->ordre.'##';
         try {
             $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::suppressionTel,$user);
+            
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -201,13 +216,15 @@ class Twilio {
      * Modifier mot de passe serrure
      * @param Easy $easy
      * @param string $pass
+     * @param User $user
      * @return bool
      */
-    public function setEasyPassword(Easy $easy, string $pass)
+    public function setEasyPassword(Easy $easy, string $pass, User $user)
     {
         $message = $pass .'P' . $easy->pass ;
         try {
             $this->send($easy->telephone,$message);
+            Historique::save($easy->id,HModel::modelEasy,HModel::modifPass,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -223,9 +240,10 @@ class Twilio {
      * @param string $debut
      * @param string $fin
      * @param bool $unlimited
+     * @param User $user
      * @return bool
      */
-    public function addTelEasy(Easy $e,string $telephone,string $debut,string $fin,bool $unlimited = true)
+    public function addTelEasy(Easy $e,string $telephone,string $debut,string $fin,bool $unlimited = true, User $user)
     {
         $msg = "" ;
         if($unlimited == true) {
@@ -236,6 +254,7 @@ class Twilio {
 
         try {
             $this->send($e->telephone,$msg);
+            Historique::save($e->id,HModel::modelEasy,HModel::ajoutTel,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -248,9 +267,10 @@ class Twilio {
      * 
      * @param Easy $e
      * @param string $action
+     * @param User $user
      * @return bool
      */
-    public function editEasyAccess(Easy $e, string $action)
+    public function editEasyAccess(Easy $e, string $action, User $user)
     {
         $todo = 'AUT' ;
         if($action == self::ACTION_OPEN) {
@@ -260,6 +280,7 @@ class Twilio {
         $message = $e->pass . $todo .'#' ;
         try {
             $this->send($e->telephone,$message);
+            Historique::save($e->id,HModel::modelEasy,HModel::access,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -272,13 +293,15 @@ class Twilio {
      * 
      * @param Easy $e
      * @param string $duration
+     * @param User $user
      * @return bool
      */
-    public function editEasyDuration(Easy $e, string $duration)
+    public function editEasyDuration(Easy $e, string $duration, User $user)
     {
         $message = $e->pass .'GOT' . $duration .'#' ;
         try {
             $this->send($e->telephone,$message);
+            Historique::save($e->id,HModel::modelEasy,HModel::duration,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -290,13 +313,15 @@ class Twilio {
      * Demande la liste des telephones de la serrure
      * 
      * @param Easy $e
+     * @param User $user
      * @return bool
      */
-    public function requestEasyPhone(Easy $e)
+    public function requestEasyPhone(Easy $e, User $user)
     {
         $message = $e->pass. 'AL001#020#';
         try {
             $this->send($e->telephone,$message);
+            Historique::save($e->id,HModel::modelEasy,HModel::listeTel,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -308,13 +333,15 @@ class Twilio {
      * Suppresion telephone serrure
      * @param Easy $e
      * @param EasyTelephone $telephone
+     * @param User $user
      * @return bool
      */
-    public function delEasyPhone(Easy $e, EasyTelephone $telephone)
+    public function delEasyPhone(Easy $e, EasyTelephone $telephone, User $user)
     {
         $message = $e->pass. 'A'.$telephone->ordre.'##';
         try {
             $this->send($e->telephone,$message);
+            Historique::save($e->id,HModel::modelEasy,HModel::suppressionTel,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());

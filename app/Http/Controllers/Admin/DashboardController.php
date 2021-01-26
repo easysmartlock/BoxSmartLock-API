@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Historique;
 
 class DashboardController extends Controller {
 
@@ -16,7 +17,8 @@ class DashboardController extends Controller {
      */
     public function index(Request $request)
     {
-        return view('admin.dashboard.index');
+        $historiques = Historique::paginate(20);
+        return view('admin.dashboard.index')->with('historiques',$historiques);
     }
 
 }

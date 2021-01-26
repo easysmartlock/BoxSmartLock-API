@@ -97,7 +97,7 @@ class EasyController extends Controller {
         $easy->pass = $pass;
         $easy->save();
 
-        $twilio->setEasyPassword($easy,$previous);
+        $twilio->setEasyPassword($easy,$previous,auth()->user());
 
         return redirect()->route('easy_index')->with('message','Mot de passe de la serrure a été modifié !');
     }

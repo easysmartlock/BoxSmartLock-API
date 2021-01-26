@@ -66,4 +66,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Easy','user_id');
     }
+
+    /**
+     * Recupère les historiques actions
+     */
+    public function historiques()
+    {
+        return $this->hasMany('App\Models\Historique','user_id');
+    }
 }

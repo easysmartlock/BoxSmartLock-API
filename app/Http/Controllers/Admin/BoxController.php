@@ -98,7 +98,7 @@ class BoxController extends Controller {
         $box->pass = $pass;
         $box->save();
 
-        $twilio->setBoxPassword($box,$previous);
+        $twilio->setBoxPassword($box,$previous,auth()->user());
 
         return redirect()->route('box_index')->with('message','Mot de passe de la box modifié !');
     }
