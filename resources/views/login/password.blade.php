@@ -3,6 +3,7 @@
 @section('body')
 <div class="container h100">
     <main class="row h100 align-items-center d-flex justify-content-center text-center">
+        @if($user)
         <form class="col-9 col-sm-6" method="POST">
             @csrf
             <h1 class="h3 mb-3 fw-normal">
@@ -26,6 +27,11 @@
             </button>
             <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
         </form>
+        @else 
+            <h4>
+                Votre lien est invalide
+            </h4>
+        @endif
     </main>
 </div>
 @endsection

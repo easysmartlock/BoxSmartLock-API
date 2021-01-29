@@ -49,6 +49,8 @@ class LoginController extends Controller
                 $user->token_password = Hash::make($password);
                 $user->save();
                 return redirect()->route('password_ok');
+            } else {
+                
             }
         }
         return view('login.password')->with('user', $user);
