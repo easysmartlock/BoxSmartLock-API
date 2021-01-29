@@ -7,7 +7,9 @@ use Twilio\Security\RequestValidator;
 use Mail;
 use App\Mail\Receipt;
 use App\Models\Box;
+use App\Models\Easy;
 use App\Models\Telephone;
+use App\Models\Response;
 
 /**
  * Webhook controller for twilio
@@ -35,6 +37,11 @@ class WebhookController extends Controller {
         $body = $request->input('Body');
         $from = $request->input('From');
 
+        $reponse = new Response();
+        $reponse->from = $from;
+        $reponse->body = $body;
+        $reponse->save();
+
         $box = Box::where('telephone', $from)->first();
         if(!empty($box)) {
             foreach($box->telephones as $telephone) {
@@ -45,17 +52,20 @@ class WebhookController extends Controller {
                 foreach($tabs as $tab) {
                     if(!empty($tab)) {
                         $data = explode(':', $tab);
-                        $telephone = new Telephone();
-                        $telephone->box()->associate($box);
-                        $telephone->ordre = $data[0];
-                        if(stripos($data[1], 'empty') === false) {
-                            $telephone->telephone = $data[1];
-                        } 
-                        $telephone->save();
+                        if(count($data) > 1) {
+                            $telephone = new Telephone();
+                            $telephone->box()->associate($box);
+                            $telephone->ordre = $data[0];
+                            if(stripos($data[1], 'empty') === false) {
+                                $telephone->telephone = $data[1];
+                            } 
+                            $telephone->save();
+                        }
                     }
                 }
             }          
         }
+        $easy = Easy::where('telephone', $from)->first();
 
         Mail::to('lala.misa.09@googlemail.com')->send(new Receipt($body));
 

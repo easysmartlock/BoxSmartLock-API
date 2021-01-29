@@ -209,4 +209,26 @@ class BoxController extends Controller
         return response()->json($reponse);
     }
 
+    /**
+     * SMS ouverture et fermeture
+     * 
+     * @param Request $request
+     * @param Twilio $twilio
+     * @return json
+     */
+    public function editSMS(Request $request, Twilio $twilio)
+    {
+        $id = $request->input('id');
+        $action = $request->input('action');
+        $box = Box::find($id);
+
+        $result = $twilio->editSMS($box,$action,$request->user());
+
+        $reponse = Constante::getReponse();
+        $reponse[Constante::PROP_DATA] = $result;
+        $reponse[Constante::PROP_ETAT] = Constante::API_OK;
+
+        return response()->json($reponse);
+    }
+
 }

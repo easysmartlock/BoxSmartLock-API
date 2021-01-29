@@ -70,6 +70,7 @@ class BoxController extends Controller {
             $box->pass = $request->input('pass');
             $box->telephone = $request->input('telephone');
             $box->nom = $request->input('nom');
+            $box->hebergement = $request->input('hebergement','');
             $box->save();
             return redirect()->route('box_index')->with('message','Box ajouté !');
         }
@@ -102,4 +103,6 @@ class BoxController extends Controller {
 
         return redirect()->route('box_index')->with('message','Mot de passe de la box modifié !');
     }
+
+    
 }

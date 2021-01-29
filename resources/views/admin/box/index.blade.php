@@ -101,6 +101,10 @@
                     <label>Nom de la box</label>
                 </div>
                 <div class="form-floating mb-3">
+                    <input type="texte" class="form-control" name="hebergement"/>
+                    <label>Hebergement</label>
+                </div>
+                <div class="form-floating mb-3">
                     <input type="texte" class="form-control" name="telephone">
                     <label>Téléphone de la box</label>
                 </div>

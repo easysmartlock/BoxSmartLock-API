@@ -17,6 +17,8 @@ class Twilio {
 
     const ACTION_CLOSE = 'close';
 
+    const ACTION_DISABLE = 'disable' ;
+
     /**
      * @var Twilio\Rest\Client
      */
@@ -142,6 +144,30 @@ class Twilio {
         try {
             $this->send($box->telephone,$message);
             Historique::save($box->id,HModel::modelBox,HModel::duration,$user);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * modifie SMS ouverture
+     * 
+     * @param Box $box
+     * @param string $action
+     * @param User $user
+     * @return bool
+     */
+    public function editSMS(Box $box, string $action, User $user)
+    {
+        $message = $box->pass .'GON10#' . $box->hebergement .'#' ;
+        if($action == self::ACTION_DISABLE) {
+            $message = $box->pass .'GON##' ;    
+        }
+        try {
+            $this->send($box->telephone,$message);
+            Historique::save($box->id,HModel::modelBox,HModel::sms,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());
@@ -342,6 +368,30 @@ class Twilio {
         try {
             $this->send($e->telephone,$message);
             Historique::save($e->id,HModel::modelEasy,HModel::suppressionTel,$user);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * modifie SMS ouverture
+     * 
+     * @param Easy $e
+     * @param string $action
+     * @param User $user
+     * @return bool
+     */
+    public function editEasySMS(Easy $e, string $action, User $user)
+    {
+        $message = $e->pass .'GON10#' . $e->hebergement .'#' ;
+        if($action == self::ACTION_DISABLE) {
+            $message = $e->pass .'GON##' ;    
+        }
+        try {
+            $this->send($e->telephone,$message);
+            Historique::save($e->id,HModel::modelEasy,HModel::sms,$user);
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());

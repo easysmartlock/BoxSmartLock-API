@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/boxes/add-phone','BoxController@addPhone');
     Route::post('/boxes/edit-access','BoxController@editAccess');
     Route::post('/boxes/edit-duration','BoxController@editDuration');
+    Route::post('/boxes/sms','BoxController@editSMS');
 
     /**
      * serrures
@@ -58,6 +59,6 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/easies/edit-access','EasyController@editAccess');
     Route::post('/easies/edit-duration','EasyController@editDuration');
     Route::post('/easies/request-list-phone','EasyController@requestPhone');
-    
+    Route::post('/easies/sms','EasyController@editSMS');
 });
 
