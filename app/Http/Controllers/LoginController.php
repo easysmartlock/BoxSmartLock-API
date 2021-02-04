@@ -40,8 +40,8 @@ class LoginController extends Controller
         $user = User::where('token_password',$token_password)->first();
         if ($request->isMethod('post') && $user) {
             $validator = Validator::make($request->all(),[
-                'password' => 'required',
-                'confpassword' => 'required',
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required',
             ]);
             if(!$validator->fails()) {
                 $password = $request->input('password');
@@ -50,7 +50,7 @@ class LoginController extends Controller
                 $user->save();
                 return redirect()->route('password_ok');
             } else {
-                
+
             }
         }
         return view('login.password')->with('user', $user);

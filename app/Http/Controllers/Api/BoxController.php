@@ -75,6 +75,7 @@ class BoxController extends Controller
         $unlimited = $request->input('unlimited');
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
+        $ordre = $request->input('ordre');
 
         $result = $twilio->addTelBox(
             $box,
@@ -85,6 +86,20 @@ class BoxController extends Controller
             $request->user()
         );
 
+        if($result == true) {
+            /**
+             * Ajout telephone
+             */
+            $phone = new Telephone();
+            $phone->box()->associate($box);
+            $phone->telephone = $telephone;
+            $phone->debut = $debut;
+            $phone->fin = $fin;
+            $phone->unlimited = $unlimited;
+            $phone->ordre = ((strlen($ordre) < 2) ? '00' : '0' ) . $ordre;
+            $phone->save();
+        }
+        
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
@@ -195,8 +210,7 @@ class BoxController extends Controller
         if($phone && $phone->box->id == $box->id) {
             $result  = $twilio->delPhone($box,$phone,$request->user());
             if($result) {
-                $phone->telephone = NULL;
-                $phone->save();
+                $phone->delete();
                 $box->refresh();
                 $reponse[Constante::PROP_DATA] = $box->telephones;
             }
@@ -229,6 +243,34 @@ class BoxController extends Controller
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);
+    }
+
+    /**
+     * get valid ordre
+     * 
+     * @param Request $request 
+     * @return json
+     */
+    public function getOrdre(Request $request)
+    {
+        $ordres = [];
+    
+        $id = $request->input('id');
+        $box = Box::find($id);
+
+        $array = $box->telephones()->get()->map(function($telephone) {
+            return (int) $telephone->ordre;
+        })->toArray();
+
+        for($i = 1 ; $i <= 20 ; $i++) {
+            if(!in_array($i,$array)) $ordres[] = $i;
+        }
+
+        $reponse = Constante::getReponse();
+        $reponse[Constante::PROP_DATA] = $ordres;
+        $reponse[Constante::PROP_ETAT] = Constante::API_OK;
+
+        return response()->json($reponse);       
     }
 
 }

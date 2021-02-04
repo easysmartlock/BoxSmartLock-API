@@ -74,6 +74,7 @@ class EasyController extends Controller
         $unlimited = $request->input('unlimited');
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
+        $ordre = $request->input('ordre');
 
         $result = $twilio->addTelEasy(
             $e,
@@ -83,6 +84,20 @@ class EasyController extends Controller
             $unlimited,
             $request->user()
         );
+
+        if($result == true) {
+            /**
+             * Ajout telephone
+             */
+            $phone = new EasyTelephone();
+            $phone->easy()->associate($e);
+            $phone->telephone = $telephone;
+            $phone->debut = $debut;
+            $phone->fin = $fin;
+            $phone->unlimited = $unlimited;
+            $phone->ordre = ((strlen($ordre) < 2) ? '00' : '0' ) . $ordre;
+            $phone->save();
+        }
 
         $reponse = Constante::getReponse();
         $reponse[Constante::PROP_DATA] = $result;
@@ -192,8 +207,7 @@ class EasyController extends Controller
         if($phone && $phone->easy->id == $e->id) {
             $result  = $twilio->delEasyPhone($e,$phone,$request->user());
             if($result) {
-                $phone->telephone = NULL;
-                $phone->save();
+                $phone->delete();
                 $e->refresh();
                 $reponse[Constante::PROP_DATA] = $e->telephones;
             }
@@ -226,5 +240,33 @@ class EasyController extends Controller
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);
+    }
+
+    /**
+     * get valid ordre
+     * 
+     * @param Request $request 
+     * @return json
+     */
+    public function getOrdre(Request $request)
+    {
+        $ordres = [];
+    
+        $id = $request->input('id');
+        $e = Easy::find($id);
+
+        $array = $e->telephones()->get()->map(function($telephone) {
+            return (int) $telephone->ordre;
+        })->toArray();
+
+        for($i = 1 ; $i <= 20 ; $i++) {
+            if(!in_array($i,$array)) $ordres[] = $i;
+        }
+
+        $reponse = Constante::getReponse();
+        $reponse[Constante::PROP_DATA] = $ordres;
+        $reponse[Constante::PROP_ETAT] = Constante::API_OK;
+
+        return response()->json($reponse);       
     }
 }

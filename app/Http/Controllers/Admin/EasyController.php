@@ -70,6 +70,7 @@ class EasyController extends Controller {
             $e->telephone = $request->input('telephone');
             $e->nom = $request->input('nom');
             $e->identifiant = $request->input('identifiant');
+            $e->hebergement = $request->input('hebergement','');
             $e->save();
             return redirect()->route('easy_index')->with('message','EasySmart ajouté !');
         }

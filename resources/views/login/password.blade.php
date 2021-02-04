@@ -14,7 +14,7 @@
                 <label for="inputEmail">Mot de passe</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" id="inputPassword" name="confpassword" class="form-control" required>
+                <input type="password" id="inputPassword" name="password_confirmation" class="form-control" required>
                 <label for="inputPassword">Confirmez Mot de passe</label>
             </div>
             <div class="checkbox mb-3">

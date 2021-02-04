@@ -69,14 +69,12 @@
                             @endif
                         </td>
                         <td>
-                           @if(!$easy->user)
-                                <a data-id="{{ $easy->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
-                                    <i class="lni lni-user"></i>
-                                </a>
-                           @endif
-                           <a data-id="{{ $easy->id }}" title="Modifier mot de passe" class="btn-pass-easy-edit btn btn-primary" href="">
+                            <a data-id="{{ $easy->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
+                                <i class="lni lni-user"></i>
+                            </a>                           
+                            <a data-id="{{ $easy->id }}" title="Modifier mot de passe" class="btn-pass-easy-edit btn btn-primary" href="">
                                 <i class="lni lni-money-protection"></i>
-                           </a>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -99,6 +97,10 @@
                 <div class="form-floating mb-3">
                     <input type="texte" class="form-control" name="identifiant" required>
                     <label>Identifiant</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="texte" class="form-control" name="hebergement"/>
+                    <label>Hebergement</label>
                 </div>
                 <div class="form-floating mb-3">
                     <input type="texte" class="form-control" name="nom" required>

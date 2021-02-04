@@ -42,33 +42,6 @@ class WebhookController extends Controller {
         $reponse->body = $body;
         $reponse->save();
 
-        $box = Box::where('telephone', $from)->first();
-        if(!empty($box)) {
-            foreach($box->telephones as $telephone) {
-                $telephone->delete();
-            }
-            $tabs = $this->parseInput($body);
-            if(count($tabs) > 0) {
-                foreach($tabs as $tab) {
-                    if(!empty($tab)) {
-                        $data = explode(':', $tab);
-                        if(count($data) > 1) {
-                            $telephone = new Telephone();
-                            $telephone->box()->associate($box);
-                            $telephone->ordre = $data[0];
-                            if(stripos($data[1], 'empty') === false) {
-                                $telephone->telephone = $data[1];
-                            } 
-                            $telephone->save();
-                        }
-                    }
-                }
-            }          
-        }
-        $easy = Easy::where('telephone', $from)->first();
-
-        Mail::to('lala.misa.09@googlemail.com')->send(new Receipt($body));
-
         $response = new MessagingResponse();
         $response->message($msg);
         return response($msg, 200);

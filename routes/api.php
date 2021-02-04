@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
      */
     Route::get('/boxes','BoxController@get');
     Route::get('/boxes/phones','BoxController@getPhones');
+    Route::get('/boxes/ordre','BoxController@getOrdre');
     Route::post('/boxes/request-list-phone','BoxController@requestPhone');
     Route::post('/boxes/delete-phone','BoxController@delPhone');
     Route::get('/boxes/{id}','BoxController@find');
@@ -51,6 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
     /**
      * serrures
      */
+    Route::get('/easies/ordre','EasyController@getOrdre');
     Route::get('/easies/phones','EasyController@getPhones');
     Route::post('/easies/delete-phone','EasyController@delPhone');
     Route::get('/easies','EasyController@get');
