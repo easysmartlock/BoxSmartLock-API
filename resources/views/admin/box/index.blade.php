@@ -69,14 +69,15 @@
                             @endif
                         </td>
                         <td>
-                           @if(!$box->user)
-                                <a data-id="{{ $box->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
-                                    <i class="lni lni-user"></i>
-                                </a>
-                           @endif
-                           <a data-id="{{ $box->id }}" title="Modifier mot de passe" class="btn-pass-box-edit btn btn-primary" href="">
+                            <a data-id="{{ $box->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
+                                <i class="lni lni-user"></i>
+                            </a>
+                            <a href="" class="btn btn-primary" title="Modifier le nom de la box">
+                                <i class="lni lni-pencil"></i>
+                            </a>
+                            <a data-id="{{ $box->id }}" title="Modifier mot de passe" class="btn-pass-box-edit btn btn-primary" href="">
                                 <i class="lni lni-money-protection"></i>
-                           </a>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
