@@ -102,5 +102,25 @@ class EasyController extends Controller {
 
         return redirect()->route('easy_index')->with('message','Mot de passe de la serrure a été modifié !');
     }
+	
+	public function nom(Request $request, Twilio $twilio)
+    {
+        $id = $request->input('nom_id');
+        $nom = $request->input('nom');
+
+        $easy = Easy::find($id);
+
+        if(!$easy) {
+            return redirect()->route('easy_index')->with('message','Easy introuvable');
+        }
+
+        $previous = $easy->nom;
+        $easy->nom = $nom;
+        $easy->save();
+
+        $twilio->setEasyNom($easy,$previous,auth()->user());
+
+        return redirect()->route('easy_index')->with('message','Nom de la serrure a été modifié !');
+    }
 
 }

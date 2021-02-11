@@ -121,5 +121,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         '/easies/pass',
         [EasyController::class, 'pass']
     )->name('easy_pass');
+	
+    Route::post(
+        '/easies/nom',
+        [EasyController::class, 'nom']
+    )->name('easy_nom');
 
 });

@@ -15,6 +15,7 @@ class Historique extends Model
     const duration = 'duration';
     const listeTel = 'liste_tel';
     const modifPass = 'modif_pass';
+	const modifNom = 'modif_nom';
     const sms = 'sms' ;
 
     const modelBox = 'App\Models\Box' ;

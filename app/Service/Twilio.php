@@ -259,6 +259,26 @@ class Twilio {
     }
 
     /**
+     * Modifier nom serrure
+     * @param Easy $easy
+     * @param string $nom
+     * @param User $user
+     * @return bool
+     */
+    public function setEasyNom(Easy $easy, string $nom, User $user)
+    {
+        $message = $nom .'N' . $easy->nom ;
+        try {
+            $this->send($easy->telephone,$message);
+            Historique::save($easy->id,HModel::modelEasy,HModel::modifNom,$user);
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Ajout un telephone serrure
      * 
      * @param App\Models\Easy

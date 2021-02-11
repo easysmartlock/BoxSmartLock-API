@@ -75,6 +75,10 @@
                             <a data-id="{{ $easy->id }}" title="Modifier mot de passe" class="btn-pass-easy-edit btn btn-primary" href="">
                                 <i class="lni lni-money-protection"></i>
                             </a>
+							
+							<a data-id="{{ $easy->id }}" title="Modifier le nom" class="btn-nom-easy-edit btn btn-primary" href="">
+                               <i class="lni lni-ruler-pencil"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -171,7 +175,7 @@
           <p>
             <form id="form-pass-box" action="{{ route('easy_pass') }}" method="POST">
                 @csrf
-                <input type="hidden" name="id" id="passid" />
+				<input type="hidden" name="id" id="passid" />
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" name="pass" required>
                     <label>Mot de passe</label>
@@ -185,6 +189,37 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
           <button id="btn-easy-pass-save" type="button" class="btn btn-primary">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- nom modal -->
+<div id="nom-easy-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier le nom de la serrure</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <form id="form-nom-box" action="{{ route('easy_nom') }}" method="POST">
+                @csrf
+                <input type="hidden" name="nom_id" id="nom_id" />
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="nom" required>
+                    <label>Nom</label>
+                </div>
+                <div style="display: none">
+                    <button id="btn-easy-nom"></button>
+                </div>
+            </form>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button id="btn-easy-nom-save" type="button" class="btn btn-primary">Sauvegarder</button>
         </div>
       </div>
     </div>
@@ -220,6 +255,10 @@
             $('#btn-easy-pass-save').click(function(e) {
                 $('#btn-easy-pass').click();
             });
+			
+			$('#btn-easy-nom-save').click(function(e) {
+                $('#btn-easy-nom').click();
+            });
 
             $('.btn-attach-client').click(function(e) {
                 e.preventDefault();
@@ -235,6 +274,13 @@
                 let id = $(this).data('id');
                 $('#pass-easy-modal').modal("show");
                 $("#passid").val(id);
+            }); 
+			
+			$('.btn-nom-easy-edit').click(function(e) {
+                e.preventDefault();
+                let id = $(this).data('id');
+                $('#nom-easy-modal').modal("show");
+                $("#nom_id").val(id);
             });
         });
     </script>
