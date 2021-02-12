@@ -118,8 +118,6 @@ class EasyController extends Controller {
         $easy->nom = $nom;
         $easy->save();
 
-        $twilio->setEasyNom($easy,$previous,auth()->user());
-
         return redirect()->route('easy_index')->with('message','Nom de la serrure a été modifié !');
     }
 
