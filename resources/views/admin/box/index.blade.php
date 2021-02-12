@@ -72,7 +72,7 @@
                             <a data-id="{{ $box->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
                                 <i class="lni lni-user"></i>
                             </a>
-                            <a href="" class="btn btn-primary" title="Modifier le nom de la box">
+                            <a data-id="{{ $box->id }}" class="btn btn-primary btn-nom-box-edit"  title="Modifier le nom de la box">
                                 <i class="lni lni-pencil"></i>
                             </a>
                             <a data-id="{{ $box->id }}" title="Modifier mot de passe" class="btn-pass-box-edit btn btn-primary" href="">
@@ -189,6 +189,37 @@
     </div>
 </div>
 
+<!-- nom modal -->
+<div id="nom-box-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier le nom de la box</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <form id="form-nom-box" action="{{ route('box_nom') }}" method="POST">
+                @csrf
+                <input type="hidden" name="nom_id" id="nom_id" />
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="nom" required>
+                    <label>Nom</label>
+                </div>
+                <div style="display: none">
+                    <button id="btn-box-nom"></button>
+                </div>
+            </form>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button id="btn-box-nom-save" type="button" class="btn btn-primary">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -218,6 +249,10 @@
 
             $('#btn-box-pass-save').click(function(e) {
                 $('#btn-box-pass').click();
+            }); 
+			
+			$('#btn-box-nom-save').click(function(e) {
+                $('#btn-box-nom').click();
             });
 
             $('.btn-attach-client').click(function(e) {
@@ -235,6 +270,15 @@
                 $('#pass-box-modal').modal("show");
                 $("#passid").val(id);
             });
+			
+			$('.btn-nom-box-edit').click(function(e) {
+                e.preventDefault();
+                let id = $(this).data('id');
+                $('#nom-box-modal').modal("show");
+                $("#nom_id").val(id);
+            });
+			
+			
         });
     </script>
 @endsection

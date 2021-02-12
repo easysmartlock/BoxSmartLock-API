@@ -71,13 +71,12 @@
                         <td>
                             <a data-id="{{ $easy->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
                                 <i class="lni lni-user"></i>
-                            </a>                           
+                            </a>     
+							<a data-id="{{ $easy->id }}" title="Modifier le nom" class="btn-nom-easy-edit btn btn-primary" href="">
+                                <i class="lni lni-pencil"></i>
+                            </a>							
                             <a data-id="{{ $easy->id }}" title="Modifier mot de passe" class="btn-pass-easy-edit btn btn-primary" href="">
                                 <i class="lni lni-money-protection"></i>
-                            </a>
-							
-							<a data-id="{{ $easy->id }}" title="Modifier le nom" class="btn-nom-easy-edit btn btn-primary" href="">
-                               <i class="lni lni-ruler-pencil"></i>
                             </a>
                         </td>
                     </tr>

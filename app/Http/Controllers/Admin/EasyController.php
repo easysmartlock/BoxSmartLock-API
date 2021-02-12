@@ -103,11 +103,15 @@ class EasyController extends Controller {
         return redirect()->route('easy_index')->with('message','Mot de passe de la serrure a été modifié !');
     }
 	
-	public function nom(Request $request, Twilio $twilio)
+	public function nom(Request $request)
     {
         $id = $request->input('nom_id');
         $nom = $request->input('nom');
-
+		
+		if(!$request->input('nom')) {
+            return redirect()->route('easy_index')->with('message','Nom vide');
+        }
+		
         $easy = Easy::find($id);
 
         if(!$easy) {

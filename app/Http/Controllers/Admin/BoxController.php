@@ -104,5 +104,27 @@ class BoxController extends Controller {
         return redirect()->route('box_index')->with('message','Mot de passe de la box modifié !');
     }
 
+	public function nom(Request $request)
+    {
+        $id = $request->input('nom_id');
+        $nom = $request->input('nom');
+		
+		if(!$request->input('nom')) {
+            return redirect()->route('box_index')->with('message','Nom vide');
+        }
+		
+        $Box = Box::find($id);
+
+        if(!$Box) {
+            return redirect()->route('box_index')->with('message','Box introuvable');
+        }
+
+        $previous = $Box->nom;
+        $Box->nom = $nom;
+        $Box->save();
+
+        return redirect()->route('box_index')->with('message','Nom de la Box a été modifié !');
+    }
+
     
 }

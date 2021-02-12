@@ -92,6 +92,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         '/boxes/pass',
         [BoxController::class, 'pass']
     )->name('box_pass');
+	
+	Route::post(
+        '/boxes/nom',
+        [BoxController::class, 'nom']
+    )->name('box_nom');
 
     /**
      * Gestion Easy
