@@ -9,6 +9,10 @@ class Telephone extends Model
 {
     use HasFactory;
 
+
+    const LIMIT = 6 ;
+
+
     /**
     * Recupere box
     */

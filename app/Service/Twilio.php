@@ -85,13 +85,17 @@ class Twilio {
      * @param User $user
      * @return bool
      */
-    public function addTelBox(Box $box,string $telephone,string $debut,string $fin,bool $unlimited = true,User $user)
+    public function addTelBox(Box $box,string $telephone,string $debut,string $fin,bool $unlimited = true,string $ordre,User $user)
     {
         $msg = "" ;
+        $ordre = $ordre + Telephone::LIMIT;
+        if(strlen($ordre) < 2) {
+            $ordre = '0' . $ordre;
+        }
         if($unlimited == true) {
-            $msg = $box->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#";
+            $msg = $box->pass . "A0". $ordre ."#". $this->format($telephone) ."#";
         } else {
-            $msg = $box->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
+            $msg = $box->pass . "A0". $ordre ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
         }
 
         try {
@@ -270,13 +274,19 @@ class Twilio {
      * @param User $user
      * @return bool
      */
-    public function addTelEasy(Easy $e,string $telephone,string $debut,string $fin,bool $unlimited = true, User $user)
+    public function addTelEasy(Easy $e,string $telephone,string $debut,string $fin,bool $unlimited = true,string $ordre, User $user)
     {
         $msg = "" ;
+
+        $ordre = $ordre + Telephone::LIMIT;
+        if(strlen($ordre) < 2) {
+            $ordre = '0' . $ordre;
+        }
+
         if($unlimited == true) {
-            $msg = $e->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#";
+            $msg = $e->pass . "A0". $ordre ."#". $this->format($telephone) ."#";
         } else {
-            $msg = $e->pass . "A0". rand(10,20) ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
+            $msg = $e->pass . "A0". $ordre ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
         }
 
         try {

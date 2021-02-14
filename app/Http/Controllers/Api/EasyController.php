@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Service\Constante;
 use App\Models\Easy;
 use App\Models\EasyTelephone;
+use App\Models\Telephone;
 use Carbon\Carbon;
 use App\Service\Twilio;
 
@@ -75,6 +76,7 @@ class EasyController extends Controller
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
         $ordre = $request->input('ordre');
+        
 
         $result = $twilio->addTelEasy(
             $e,
@@ -82,6 +84,7 @@ class EasyController extends Controller
             $debut,
             $fin,
             $unlimited,
+            $ordre,
             $request->user()
         );
 
@@ -259,7 +262,7 @@ class EasyController extends Controller
             return (int) $telephone->ordre;
         })->toArray();
 
-        for($i = 1 ; $i <= 20 ; $i++) {
+        for($i = 1 ; $i <= 20 - Telephone::LIMIT ; $i++) {
             if(!in_array($i,$array)) $ordres[] = $i;
         }
 

@@ -76,6 +76,7 @@ class BoxController extends Controller
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
         $ordre = $request->input('ordre');
+         
 
         $result = $twilio->addTelBox(
             $box,
@@ -83,6 +84,7 @@ class BoxController extends Controller
             $debut,
             $fin,
             $unlimited,
+            $ordre,
             $request->user()
         );
 
@@ -262,7 +264,7 @@ class BoxController extends Controller
             return (int) $telephone->ordre;
         })->toArray();
 
-        for($i = 1 ; $i <= 20 ; $i++) {
+        for($i = 1 ; $i <= 20 - Telephone::LIMIT ; $i++) {
             if(!in_array($i,$array)) $ordres[] = $i;
         }
 
