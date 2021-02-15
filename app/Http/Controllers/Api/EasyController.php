@@ -76,7 +76,7 @@ class EasyController extends Controller
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
         $ordre = $request->input('ordre');
-        
+        $nom = $request->input('nom');
 
         $result = $twilio->addTelEasy(
             $e,
@@ -96,6 +96,7 @@ class EasyController extends Controller
             $phone->easy()->associate($e);
             $phone->telephone = $telephone;
             $phone->debut = $debut;
+            $phone->nom = $nom;
             $phone->fin = $fin;
             $phone->unlimited = $unlimited;
             $phone->ordre = ((strlen($ordre) < 2) ? '00' : '0' ) . $ordre;

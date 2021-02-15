@@ -76,6 +76,7 @@ class BoxController extends Controller
         $prefix = $request->input('prefix');
         $telephone = $request->input('telephone');
         $ordre = $request->input('ordre');
+        $nom = $request->input('nom');
          
 
         $result = $twilio->addTelBox(
@@ -93,6 +94,7 @@ class BoxController extends Controller
              * Ajout telephone
              */
             $phone = new Telephone();
+            $phone->nom = $nom;
             $phone->box()->associate($box);
             $phone->telephone = $telephone;
             $phone->debut = $debut;
