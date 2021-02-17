@@ -34,7 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function() {
      * profil
      */
     Route::get('/user','UserController@get');
-    
+    Route::post('/user','UserController@edit');
     /**
      * box
      */
