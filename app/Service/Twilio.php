@@ -230,7 +230,9 @@ class Twilio {
      */
     public function delPhone(Box $box, Telephone $telephone, User $user)
     {
-        $message = $box->pass. 'A'.$telephone->ordre.'##';
+        $ordre = (int)$telephone->ordre + Telephone::LIMIT;
+        $ordre = ((strlen($ordre) < 2) ? '00' : '0' ) . $ordre;
+        $message = $box->pass. 'A'.$ordre.'##';
         try {
             $this->send($box->telephone,$message);
             Historique::save($box->id,HModel::modelBox,HModel::suppressionTel,$user);
@@ -375,7 +377,9 @@ class Twilio {
      */
     public function delEasyPhone(Easy $e, EasyTelephone $telephone, User $user)
     {
-        $message = $e->pass. 'A'.$telephone->ordre.'##';
+        $ordre = (int)$telephone->ordre + Telephone::LIMIT;
+        $ordre = ((strlen($ordre) < 2) ? '00' : '0' ) . $ordre;
+        $message = $e->pass. 'A'.$ordre.'##';
         try {
             $this->send($e->telephone,$message);
             Historique::save($e->id,HModel::modelEasy,HModel::suppressionTel,$user);
