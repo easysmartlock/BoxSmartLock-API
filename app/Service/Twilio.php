@@ -76,7 +76,7 @@ class Twilio {
         if(strlen($hour) < 2) $hour = '0' . $hour;
         if(strlen($minute) < 2) $minute = '0' . $minute;
 
-        return substr($_date->year,1,2) . $month . $day . $hour . $minute;
+        return substr($_date->year,2,2) . $month . $day . $hour . $minute;
     }
 
     /**
