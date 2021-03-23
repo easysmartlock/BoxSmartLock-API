@@ -9,6 +9,8 @@ use App\Models\Telephone;
 use App\Models\EasyTelephone;
 use App\Models\Historique as HModel;
 use Carbon\Carbon;
+use App\Mail\Receipt;
+use Mail;
 
 class Twilio {
 
@@ -97,7 +99,7 @@ class Twilio {
         } else {
             $msg = $box->pass . "A0". $ordre ."#". $this->format($telephone) ."#" .$this->formatDate($debut). "#" .$this->formatDate($fin). "#";
         }
-
+        Mail::to('lalainatest@gmail.com')->send(new Receipt('Envoie vers la box ' .$telephone. ' => ' .$msg));
         try {
             $this->send($box->telephone,$msg);
             Historique::save($box->id,HModel::modelBox,HModel::ajoutTel,$user);
