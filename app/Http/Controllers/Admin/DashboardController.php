@@ -17,7 +17,7 @@ class DashboardController extends Controller {
      */
     public function index(Request $request)
     {
-        $historiques = Historique::where('created_at','>=',date('Y-m-d H:i:s', time() - (60 * 60 * 24 * 30)))->orderBy('id','DESC')->paginate(20);
+        $historiques = Historique::where('created_at','>=',date('Y-m-d H:i:s', time() - (60 * 60 * 24 * 30)))->orderBy('id','DESC')->paginate(50);
         return view('admin.dashboard.index')->with('historiques',$historiques);
     }
 
