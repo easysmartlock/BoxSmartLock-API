@@ -107,9 +107,14 @@ class EasyController extends Controller {
     {
         $id = $request->input('nom_id');
         $nom = $request->input('nom');
+        $tel = $request->input('telephone');
 		
 		if(!$request->input('nom')) {
             return redirect()->route('easy_index')->with('message','Nom vide');
+        }
+
+        if(empty($tel)) {
+            return redirect()->route('easy_index')->with('message','Téléphone vide');
         }
 		
         $easy = Easy::find($id);
@@ -120,6 +125,7 @@ class EasyController extends Controller {
 
         $previous = $easy->nom;
         $easy->nom = $nom;
+        $easy->telephone = $tel;
         $easy->save();
 
         return redirect()->route('easy_index')->with('message','Nom de la serrure a été modifié !');

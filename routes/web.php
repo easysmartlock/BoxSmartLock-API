@@ -48,10 +48,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [UserController::class, 'add']
     );
 
-    Route::get(
+    Route::any(
         '/users/{id}/delete',
         [UserController::class, 'delete']
     )->name('user_delete');
+
+    Route::any(
+        '/users/{id}/edit',
+        [UserController::class, 'edit']
+    )->name('user_edit');
 
     Route::get(
         '/users/{id}/view',

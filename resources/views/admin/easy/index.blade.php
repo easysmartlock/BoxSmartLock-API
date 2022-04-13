@@ -72,7 +72,7 @@
                             <a data-id="{{ $easy->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
                                 <i class="lni lni-user"></i>
                             </a>     
-							<a data-id="{{ $easy->id }}" title="Modifier le nom" class="btn-nom-easy-edit btn btn-primary" href="">
+							<a data-id="{{ $easy->id }}" data-telephone="{{ $easy->telephone }}" data-nom="{{ $easy->nom }}" title="Modifier le nom" class="btn-nom-easy-edit btn btn-primary" href="">
                                 <i class="lni lni-pencil"></i>
                             </a>							
                             <a data-id="{{ $easy->id }}" title="Modifier mot de passe" class="btn-pass-easy-edit btn btn-primary" href="">
@@ -198,7 +198,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modifier le nom de la serrure</h5>
+          <h5 class="modal-title">Modifier la serrure</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -207,8 +207,12 @@
                 @csrf
                 <input type="hidden" name="nom_id" id="nom_id" />
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="nom" required>
+                    <input type="text" class="form-control" id="nom-edit-modal" name="nom" required>
                     <label>Nom</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="telephone-edit-modal" name="telephone" required>
+                    <label>Téléphone</label>
                 </div>
                 <div style="display: none">
                     <button id="btn-easy-nom"></button>
@@ -271,6 +275,7 @@
             $('.btn-pass-easy-edit').click(function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
+
                 $('#pass-easy-modal').modal("show");
                 $("#passid").val(id);
             }); 
@@ -278,6 +283,12 @@
 			$('.btn-nom-easy-edit').click(function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
+                let nom = $(this).data('nom');
+                let tel = $(this).data('telephone');
+
+                $('#telephone-edit-modal').val(tel);
+                $('#nom-edit-modal').val(nom);
+
                 $('#nom-easy-modal').modal("show");
                 $("#nom_id").val(id);
             });

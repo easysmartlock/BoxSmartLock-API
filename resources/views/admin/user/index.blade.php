@@ -57,6 +57,9 @@
                             <a title="Supprimer" class="btn btn-warning" href="{{ route('user_delete',['id' => $user->id]) }}">
                                 <i class="lni lni-trash"></i>
                             </a>
+                            <a title="Supprimer" class="btn btn-info" href="{{ route('user_edit',['id' => $user->id]) }}">
+                                <i class="lni lni-pencil"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

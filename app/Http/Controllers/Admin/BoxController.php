@@ -108,9 +108,14 @@ class BoxController extends Controller {
     {
         $id = $request->input('nom_id');
         $nom = $request->input('nom');
+        $telephone = $request->input('telephone');
 		
 		if(!$request->input('nom')) {
             return redirect()->route('box_index')->with('message','Nom vide');
+        }
+
+        if(empty($telephone)) {
+            return redirect()->route('box_index')->with('message','tél vide');
         }
 		
         $Box = Box::find($id);
@@ -121,6 +126,7 @@ class BoxController extends Controller {
 
         $previous = $Box->nom;
         $Box->nom = $nom;
+        $Box->telephone = $telephone;
         $Box->save();
 
         return redirect()->route('box_index')->with('message','Nom de la Box a été modifié !');

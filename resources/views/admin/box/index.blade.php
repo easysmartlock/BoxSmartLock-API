@@ -72,7 +72,7 @@
                             <a data-id="{{ $box->id }}" class="btn btn-primary btn-attach-client" title="Rattaché a un client" href="#">
                                 <i class="lni lni-user"></i>
                             </a>
-                            <a data-id="{{ $box->id }}" class="btn btn-primary btn-nom-box-edit"  title="Modifier le nom de la box">
+                            <a data-id="{{ $box->id }}" data-nom="{{ $box->nom }}" data-telephone="{{ $box->telephone }}" class="btn btn-primary btn-nom-box-edit"  title="Modifier le nom de la box">
                                 <i class="lni lni-pencil"></i>
                             </a>
                             <a data-id="{{ $box->id }}" title="Modifier mot de passe" class="btn-pass-box-edit btn btn-primary" href="">
@@ -194,7 +194,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modifier le nom de la box</h5>
+          <h5 class="modal-title">Modifier la box</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -203,8 +203,12 @@
                 @csrf
                 <input type="hidden" name="nom_id" id="nom_id" />
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="nom" required>
+                    <input type="text" class="form-control" id="nom-edit-modal" name="nom" required>
                     <label>Nom</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="telephone-edit-modal" name="telephone">
+                    <label>Téléphone de la box</label>
                 </div>
                 <div style="display: none">
                     <button id="btn-box-nom"></button>
@@ -274,6 +278,11 @@
 			$('.btn-nom-box-edit').click(function(e) {
                 e.preventDefault();
                 let id = $(this).data('id');
+                let nom = $(this).data('nom');
+                let tel = $(this).data('telephone');
+                //nom & tel
+                $('#telephone-edit-modal').val(tel);
+                $('#nom-edit-modal').val(nom);
                 $('#nom-box-modal').modal("show");
                 $("#nom_id").val(id);
             });

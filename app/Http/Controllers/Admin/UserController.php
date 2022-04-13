@@ -105,4 +105,42 @@ class UserController extends Controller {
         return view('admin.user.view')->with('user', $user);       
     }
 
+    /**
+     * Edit utilisateur
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Request $request,int $id)
+    {
+        $user = User::find($id);
+        
+        if(!$user) {
+            return redirect()->route('user_index')->with('message', 'Client introuvable');    
+        }
+
+        if($request->isMethod('POST')) {
+            $email = $request->input('email');
+            $telephone = $request->input('telephone');
+            $nom = $request->input('nom');
+            $prenom = $request->input('prenom');
+
+            $exist = User::where('email', $email)->where('id','!=', $user->id)->count();
+
+            if($exist == 0) {
+                $user->email = $email;
+                $user->telephone = $telephone;
+                $user->nom = $nom;
+                $user->prenom = $prenom;
+                $user->save();
+                return redirect()->route('user_index')->with('message', 'Client modifié');
+            } else {
+                return redirect()->route('user_index')->with('message', 'Email déja utilisé');
+            }
+        }
+
+        return view('admin.user.edit')->with('user', $user);       
+    }
+
 }
