@@ -118,7 +118,7 @@ class LoginController extends Controller
     {
         $reponse = Constante::getReponse();
         $email = $request->input('email','');
-        $user = User::where('role','<>',User::ADMIN)->where('email',$email)->first();
+        $user = User::where('email',$email)->first();
     
         if(!$user) {
             $reponse[Constante::PROP_MESSAGE] = 'Email Introuvable' ;

@@ -38,13 +38,17 @@ class Twilio {
      * @param string $body
      * @return void
      */
-    public function send(String $to,String $body) {
+    public function send(String $to,String $body,$callback = null) {
+        $params = [
+            'from' => config('twilio.from'),
+            'body' => $body
+        ];
+        if(!empty($callback)) {
+            //$params['statusCallback'] = $callback;
+        }
         $this->client->messages->create(
             $to,
-            [
-                'from' => config('twilio.from'),
-                'body' => $body
-            ]
+            $params
         );
     }
 
@@ -239,6 +243,26 @@ class Twilio {
             $this->send($box->telephone,$message);
             Historique::save($box->id,HModel::modelBox,HModel::suppressionTel,$user);
             
+            return true;
+        }catch(\Exception $e) {
+            print_r($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Récupération telephone
+     * @param Box $box
+     */
+    public function recup(Box $box)
+    {
+        $message = $box->pass. 'AL001#020#';
+        try {
+            $this->send(
+                $box->telephone,
+                $message,
+                route('twilio')
+            );  
             return true;
         }catch(\Exception $e) {
             print_r($e->getMessage());

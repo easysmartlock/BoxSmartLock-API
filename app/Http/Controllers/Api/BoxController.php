@@ -111,6 +111,18 @@ class BoxController extends Controller
         return response()->json($reponse);
     }
 
+    /**
+    * Ajout message
+    */
+    public function addMessage(Request $request)
+    {
+        $marque = $request->input('marque','');
+        $telephone = $request->input('telephone','');
+        $pass = $request->input('pass', '');
+
+        return response()->json([]);
+    }
+
 
     /**
      * Modifier les access
@@ -275,6 +287,28 @@ class BoxController extends Controller
         $reponse[Constante::PROP_ETAT] = Constante::API_OK;
 
         return response()->json($reponse);       
+    }
+
+    /**
+    *   Récupération
+    * @param Request $request
+    * @param Twilio $twilio
+    * @return json
+    */
+    public function recup(Request $request, Twilio $twilio)
+    {
+        $id = $request->input('id');
+        $box = Box::find($id);
+
+        if(!$box) {
+            return response()->status(404)->json([]);
+        }
+
+        $result = $twilio->recup($box);
+        $reponse = Constante::getReponse();
+        $reponse[Constante::PROP_DATA] = $result;
+        $reponse[Constante::PROP_ETAT] = Constante::API_OK;
+        return response()->json($reponse);
     }
 
 }

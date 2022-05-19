@@ -26,6 +26,11 @@ Route::post('/connexion','LoginController@connexion');
 Route::post('/password','LoginController@password');
 
 /**
+* fix
+*/
+Route::any('/twilio','TwilioController@get')->name('twilio');
+
+/**
  * Route protegé
  */
 Route::middleware(['auth:sanctum'])->group(function() {
@@ -41,10 +46,12 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::get('/boxes','BoxController@get');
     Route::get('/boxes/phones','BoxController@getPhones');
     Route::get('/boxes/ordre','BoxController@getOrdre');
+    Route::get('/boxes/recup','BoxController@recup');
     Route::post('/boxes/request-list-phone','BoxController@requestPhone');
     Route::post('/boxes/delete-phone','BoxController@delPhone');
     Route::get('/boxes/{id}','BoxController@find');
     Route::post('/boxes/add-phone','BoxController@addPhone');
+    Route::post('/boxes/add-message','BoxController@addMessage');
     Route::post('/boxes/edit-access','BoxController@editAccess');
     Route::post('/boxes/edit-duration','BoxController@editDuration');
     Route::post('/boxes/sms','BoxController@editSMS');
