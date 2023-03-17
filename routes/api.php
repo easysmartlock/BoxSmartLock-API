@@ -26,6 +26,14 @@ Route::post('/connexion','LoginController@connexion');
 Route::post('/password','LoginController@password');
 
 /**
+ * RTU route
+ */
+Route::post('/RTU/inscription','RtuController@inscription');
+Route::post('/RTU/connexion','RtuController@connexion');
+Route::post('/RTU/password','RtuController@password');
+
+
+/**
 * fix
 */
 Route::any('/twilio','TwilioController@get')->name('twilio');
