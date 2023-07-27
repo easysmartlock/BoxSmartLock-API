@@ -84,6 +84,11 @@
             </tbody>
         </table>
     </div>
+    <div class="row">
+        <div class="col-12">
+            {{ $boxes->links() }}
+        </div>
+    </div>
 </div>
 <!-- add modal -->
 <div id="add-modal" class="modal" tabindex="-1">
